@@ -19,6 +19,6 @@ function main(args)
     println(solution)
 end
 
-main(ARGS)
+@time main(ARGS)
 
     
