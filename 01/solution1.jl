@@ -7,5 +7,5 @@ end
 f = open(ARGS[1]);
 input = parse.(Int64,readlines(f))
 close(f)
-println(expenses(input))
+@time println(expenses(input))
 
