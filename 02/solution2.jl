@@ -1,7 +1,10 @@
+using BenchmarkTools
+
 function checkline(line::String)
-    firstidx, secondidx = parse.(Int64,match(r"(\d+)-(\d+)",line).captures)
-    target = match(r"(\D):",line).captures[1][1]
-    password = match(r": (\D+)",line).captures[1]
+    regex = match(r"(\d+)-(\d+) (\D): (\D+)",line)
+    firstidx, secondidx = parse.(Int,regex.captures[1:2])
+    target = regex.captures[3][1]
+    password = regex.captures[4]
     if firstidx > length(password)
         return 0
     end
@@ -16,12 +19,12 @@ function main(args)
     for line in eachline(ARGS[1])
         validcount += checkline(line)
     end
-    println(validcount)
+    return(validcount)
 end
 
 #first run
-main(ARGS)
+println(main(ARGS))
 
 #second run
-@time main(ARGS)
+@btime main(ARGS)
     

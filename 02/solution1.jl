@@ -1,13 +1,12 @@
-function checkline(line::String)
-    lowerbound, upperbound = parse.(Int64,match(r"(\d+)-(\d+)",line).captures)
-    target = match(r"(\D):",line).captures[1][1]
-    password = match(r": (\D+)",line).captures[1]
+using BenchmarkTools
 
-    if lowerbound <= count(i->i==target,password) <= upperbound
-        return 1
-    else
-        return 0
-    end
+function checkline(line::String)
+    regex = match(r"(\d+)-(\d+) (\D): (\D+)",line)
+    lowerbound, upperbound = parse.(Int,regex.captures[1:2])
+    target = regex.captures[3][1]
+    password = regex.captures[4]
+
+    lowerbound <= count(i->i==target,password) <= upperbound
 end
 
 function main(args)
@@ -15,12 +14,12 @@ function main(args)
     for line in eachline(ARGS[1])
         validcount += checkline(line)
     end
-    println(validcount)
+    return(validcount)
 end
 
 #first run
-main(ARGS)
+println(main(ARGS))
 
 #second run
-@time main(ARGS)
+@btime main(ARGS)
     
