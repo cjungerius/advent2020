@@ -85,8 +85,8 @@ function main(args)
 
     fields = Set(["byr","iyr","eyr","hgt","hcl","ecl","pid"])
     input = args[1]
-    validfieldsone = []
-    validfieldstwo = []
+    validfieldsone = Set()
+    validfieldstwo = Set()
 
     validone = 0
     validtwo = 0
@@ -100,10 +100,10 @@ function main(args)
                 end
             end
         else
-            if length(validfieldsone) == 7 && all(in.(validfieldsone, Ref(fields)))
+            if validfieldsone == fields
                 validone += 1
             end
-            if length(validfieldstwo) == 7 && all(in.(validfieldstwo, Ref(fields)))
+            if validfieldstwo == fields
                 validtwo += 1
             end
             empty!(validfieldsone)
