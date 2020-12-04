@@ -1,7 +1,7 @@
 using BenchmarkTools
 
 function validation(field, value)
-    fields = Dict(
+    test = Dict(
         [
             (
                 "byr", 
@@ -54,28 +54,29 @@ function validation(field, value)
             (
                 "hcl",
                 function(value)
-                    m = match(r"^#[0-9|a-f]{6}$",value)
-                    return !isnothing(m)
+                    return occursin(r"^#[0-9|a-f]{6}$",value)
                 end
             ),
             (
                 "ecl",
                 function(value)
-                    m = match(r"^amb$|^blu$|^brn$|^gry$|^grn$|^hzl$|^oth$",value)
-                    return !isnothing(m)
+                    return occursin(r"^amb$|^blu$|^brn$|^gry$|^grn$|^hzl$|^oth$",value)
                 end
             ),
             (
                 "pid",
                 function(value)
-                    m = match(r"^\d{9}$",value)
-                    return !isnothing(m)
+                    return occursin(r"^\d{9}$",value)
                 end
             )
         ]
     )
 
-    Int(fields[field](value))
+    if test[field](value)
+        return field
+    else
+        return "invalid $field"
+    end
 end
 
 
@@ -84,8 +85,8 @@ function main(args)
 
     fields = Set(["byr","iyr","eyr","hgt","hcl","ecl","pid"])
     input = args[1]
-    validfieldsone = 0
-    validfieldstwo = 0
+    validfieldsone = []
+    validfieldstwo = []
 
     validone = 0
     validtwo = 0
@@ -94,27 +95,27 @@ function main(args)
         if length(line) > 0
             for match in eachmatch(r"([a-z]+)\:(\S+)",line)
                 if in(match.captures[1], fields)
-                    validfieldsone += 1
-                    validfieldstwo += validation(match.captures[1], match.captures[2])
+                    push!(validfieldsone, match.captures[1])
+                    push!(validfieldstwo, validation(match.captures[1], match.captures[2]))
                 end
             end
         else
-            if validfieldsone == 7
+            if length(validfieldsone) == 7 && all(in.(validfieldsone, Ref(fields)))
                 validone += 1
             end
-            if validfieldstwo == 7
+            if length(validfieldstwo) == 7 && all(in.(validfieldstwo, Ref(fields)))
                 validtwo += 1
             end
-            validfieldsone = 0
-            validfieldstwo = 0
+            empty!(validfieldsone)
+            empty!(validfieldstwo)
         end
     end
 
     #check last field
-    if validfieldsone == 7
+    if length(validfieldsone) == 7 && all(in.(validfieldsone, Ref(fields)))
         validone += 1
     end
-    if validfieldstwo == 7
+    if length(validfieldstwo) == 7 && all(in.(validfieldstwo, Ref(fields)))
         validtwo += 1
     end
 
