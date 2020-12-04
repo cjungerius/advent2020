@@ -1,3 +1,5 @@
+using BenchmarkTools
+
 function validation(field, value)
     fields = Dict(
         [
@@ -73,13 +75,14 @@ function validation(field, value)
         ]
     )
 
-    fields[field](value)
+    Int(fields[field](value))
 end
 
 
 
 function main(args)
 
+    fields = Set(["byr","iyr","eyr","hgt","hcl","ecl","pid"])
     input = args[1]
     fieldn = 0
     valid = 0
@@ -108,3 +111,5 @@ valid
 end
 
 println(main(ARGS))
+
+@btime(main(ARGS))
