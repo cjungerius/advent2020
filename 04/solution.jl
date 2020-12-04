@@ -84,30 +84,41 @@ function main(args)
 
     fields = Set(["byr","iyr","eyr","hgt","hcl","ecl","pid"])
     input = args[1]
-    fieldn = 0
-    valid = 0
+    validfieldsone = 0
+    validfieldstwo = 0
+
+    validone = 0
+    validtwo = 0
 
     for line in eachline(input)
         if length(line) > 0
             for match in eachmatch(r"([a-z]+)\:(\S+)",line)
                 if in(match.captures[1], fields)
-                    fieldn += validation(match.captures[1], match.captures[2])
+                    validfieldsone += 1
+                    validfieldstwo += validation(match.captures[1], match.captures[2])
                 end
             end
         else
-            if fieldn == 7
-                valid += 1
+            if validfieldsone == 7
+                validone += 1
             end
-            fieldn = 0
+            if validfieldstwo == 7
+                validtwo += 1
+            end
+            validfieldsone = 0
+            validfieldstwo = 0
         end
     end
 
     #check last field
-    if fieldn == 7
-        valid += 1
+    if validfieldsone == 7
+        validone += 1
+    end
+    if validfieldstwo == 7
+        validtwo += 1
     end
 
-valid
+(validone,validtwo)
 end
 
 println(main(ARGS))
