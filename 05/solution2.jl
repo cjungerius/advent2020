@@ -8,7 +8,7 @@ end
 
 function main(args)
     highest = 0
-    input = readlines("input.txt")
+    input = readlines(args[1])
     ids = seatid.(input)
     for id = minimum(ids):maximum(ids)
         if !any(x->x==id,ids)
