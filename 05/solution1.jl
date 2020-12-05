@@ -8,10 +8,9 @@ end
 
 function main(args)
     highest = 0
-    for line in eachline("input.txt")
-        highest = max(highest,seatid(line))
-    end
-    println(highest)
+    input = readlines("input.txt")
+    ids = seatid.(input)
+    maximum(ids)
 end
 
-main(ARGS)
+println(main(ARGS))
