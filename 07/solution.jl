@@ -9,7 +9,6 @@ for (i, line) in enumerate(input)
 end
 
 M = spzeros(Int, length(input), length(input))
-bagdict
 
 for (i, line) in enumerate(input)
     for m in eachmatch(r"(\d+) ([a-z]+ [a-z]+)", line)
