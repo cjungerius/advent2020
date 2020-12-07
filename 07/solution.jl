@@ -35,7 +35,7 @@ let	total = 0
     println("part 1: ", total)
 end
 
-let total = 0::Int
+let total = 0
 	s = Stack{Int}()
 	push!(s,bagdict["shiny gold"])
 	
