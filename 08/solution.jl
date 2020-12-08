@@ -1,12 +1,16 @@
 instr = readlines("input.txt")
-repeat = zeros(Int,length(instr))
 
-
-let pos = 1, acc = 0
+function boot(instr::Array{String})
+    repeat = zeros(Int, length(instr))
+    pos = 1
+    acc = 0
     while true
-        if repeat[pos] == 1
-            break
-        else repeat[pos] = 1
+        if pos > length(repeat)
+            return (0, acc)
+        elseif repeat[pos] == 1
+            return (pos, acc)
+        else 
+            repeat[pos] = 1
         end
 
         if instr[pos][1:3] == "acc"
@@ -18,6 +22,29 @@ let pos = 1, acc = 0
             pos += 1
         end
     end
+end
 
-    println(acc)
+jumpornop = findall(instr) do line
+    occursin(r"(jmp|nop)", line)
+end
+
+for i in jumpornop
+    if instr[i][1:3] == "jmp"
+        instr[i] = replace(instr[i],"jmp" => "nop")
+        code, acc = boot(instr)
+        if code == 0
+            println(acc)
+            break
+        end
+        instr[i] = replace(instr[i],"nop" => "jmp")
+    else
+        instr[i] = replace(instr[i],"nop" => "jmp")
+        code, acc = boot(instr)
+        if code == 0
+            println(acc)
+            break
+        end
+        instr[i] = replace(instr[i],"jmp" => "nop")
+    end
+
 end
