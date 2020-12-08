@@ -1,23 +1,23 @@
 instr = readlines("input.txt")
 
 function boot(instr::Array{String})
-    repeat = zeros(Int, length(instr))
+    repeat = Set()
     pos = 1
     acc = 0
     while true
-        if pos > length(repeat)
+        if pos > length(instr)
             return (0, acc)
-        elseif repeat[pos] == 1
+        elseif in(pos,repeat)
             return (pos, acc)
         else 
-            repeat[pos] = 1
+            push!(repeat,pos)
         end
 
         if instr[pos][1:3] == "acc"
-            acc += eval(Meta.parse(instr[pos][5:end]))
+            acc += Meta.parse(instr[pos][5:end])
             pos += 1
         elseif instr[pos][1:3] == "jmp"
-            pos += eval(Meta.parse(instr[pos][5:end]))
+            pos += Meta.parse(instr[pos][5:end])
         else
             pos += 1
         end
