@@ -39,3 +39,24 @@ function parttwo()
     reduce(*,combinations)
 end
 
+function parttwodict()
+    paths = Dict([0=>1])
+    input = vec(readdlm("input.txt",Int))
+    sort!(input)
+    for i in input
+        val = 0
+        if in(i-3,keys(paths))
+        val += paths[i-3]
+        end
+        if in(i-2, keys(paths))
+        val += paths[i-2]
+        end
+        if in(i-1,keys(paths))
+        val += paths[i-1]
+        end
+        paths[i] = val
+        end
+    paths[maximum(input)]
+    end
+
+
