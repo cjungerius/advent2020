@@ -24,5 +24,34 @@ function navigation(input)
     abs(x)+abs(y)
 end
 
-input = readlines(ARGS[1])
-println(navigation(input))
+function navigationwaypoint(input)
+    x = 0
+    y = 0
+    wx = 10
+    wy = 1
+    for line in input
+        value = parse(Int,line[2:end])
+        if line[1]=='F'
+            x += wx*value
+            y += wy*value
+        elseif line[1]=='N'
+            wy += value
+        elseif line[1]=='S'
+            wy -= value
+        elseif line[1]=='W'
+            wx -= value
+        elseif line[1]=='E'
+            wx += value
+        elseif line[1]=='L'
+            angle = deg2rad(value)
+            wx, wy = cos(angle)*wx - sin(angle)*wy, sin(angle)*wx + cos(angle)*wy
+        elseif line[1]=='R'
+            angle = 2*pi - deg2rad(value)
+            wx, wy = cos(angle)*wx - sin(angle)*wy, sin(angle)*wx + cos(angle)*wy
+        end
+    end
+    abs(x) + abs(y)
+end
+input = readlines("input.txt")
+navigation(input)
+navigationwaypoint(input)
